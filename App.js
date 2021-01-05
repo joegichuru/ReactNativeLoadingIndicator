@@ -20,10 +20,11 @@ import {Provider as StoreProvider, useDispatch, useSelector} from 'react-redux';
 import {createStore} from 'redux';
 import reducer from './src/redux/reducer';
 import {resetScore, updateScore} from './src/redux/actions';
+import Classic from './src/Classic';
 
 const {width, height} = Dimensions.get('window');
 const store = createStore(reducer);
-const App: () => React$Node = () => {
+const App = () => {
   //we use dispatch to trigger an action
   const dispatch = useDispatch();
   //we use selector to query something/kind of a two way binding that notifies a ui if value changes
@@ -49,6 +50,7 @@ const App: () => React$Node = () => {
             }}>
             Current Score {score}
           </Text>
+          <Classic />
           <View
             style={{
               position: 'absolute',
