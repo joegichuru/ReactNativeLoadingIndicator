@@ -10,15 +10,19 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "lottie-ios": "3.1.8",
+    "lottie-react-native": "^3.5.0",
+    "prop-types": "^15.7.2",
     "react": "16.13.1",
-    "react-native": "0.63.4"
+    "react-native": "0.63.4",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5"
   },
   "author": {
     "email": "joegichuru@outlook.com",
     "name": "Joe Gichuru",
     "url": "https://github.com/joegichuru"
   },
-
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/runtime": "^7.12.5",

@@ -10,105 +10,105 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
-  Text,
   StatusBar,
+  Dimensions,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
+import {Provider as StoreProvider, useDispatch, useSelector} from 'react-redux';
+import {createStore} from 'redux';
+import reducer from './src/redux/reducer';
+import {resetScore, updateScore} from './src/redux/actions';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
+const {width, height} = Dimensions.get('window');
+const store = createStore(reducer);
 const App: () => React$Node = () => {
+  //we use dispatch to trigger an action
+  const dispatch = useDispatch();
+  //we use selector to query something/kind of a two way binding that notifies a ui if value changes
+  const score = useSelector((state) => {
+    return state.root.score;
+  });
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+        <View
+          style={{
+            backgroundColor: 'white',
+            width: width,
+            height: height,
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+          }}>
+          <Text
+            style={{
+              fontSize: 30,
+            }}>
+            Current Score {score}
+          </Text>
+          <View
+            style={{
+              position: 'absolute',
+              flexDirection: 'row',
+              bottom: 0,
+            }}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => {
+                dispatch(updateScore(score + 1));
+              }}>
+              <Text style={styles.btnTxt}>Increment</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => {
+                dispatch(resetScore());
+              }}>
+              <Text style={styles.btnTxt}>Reset</Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
+        </View>
+        {/*<LoadingIndicator*/}
+        {/*  loading={true}*/}
+        {/*  text={'Updating...'}*/}
+        {/*  size={60}*/}
+        {/*  textProps={{color: 'white'}}*/}
+        {/*/>*/}
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    backgroundColor: 'rgba(20,20,20,.2)',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  btn: {
+    borderRadius: 8,
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingStart: 10,
+    paddingEnd: 10,
+    margin: 10,
+    width: null,
   },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  btnTxt: {
+    color: 'white',
+    margin: 10,
   },
 });
-
-export default App;
+const MainApp = (props) => {
+  return (
+    <StoreProvider store={store}>
+      <App />
+    </StoreProvider>
+  );
+};
+export default MainApp;
